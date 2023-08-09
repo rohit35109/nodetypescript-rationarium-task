@@ -1,4 +1,4 @@
-import { CRUD } from "../common/crud";
+import { CRUD } from "../common/crud.interface";
 import booksDao from "./dao/books.dao";
 import { BookDto } from "./dto/book.dto";
 

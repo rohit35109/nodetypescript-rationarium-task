@@ -8,6 +8,8 @@ import cors from "cors";
 import { CommonRoutesConfig } from "./app/common/common.routes.config";
 import { BookRoutes } from "./app/books/book.route.config";
 import debug from "debug";
+import sequelize from "./app/common/sequelize.config";
+import './app/books/model/book.model';
 
 dotenv.config();
 const app: express.Application = express();
@@ -53,9 +55,15 @@ app.get("/", (req: express.Request, res: express.Response) => {
     );
 });
 
-server.listen(port, () => {
-  routes.forEach((route: CommonRoutesConfig) => {
-    debugLog(`Routes configured for ${route.getName()}`);
-    console.log(runningMessage);
+
+sequelize.sync().then(() => {
+  server.listen(port, () => {
+    routes.forEach((route: CommonRoutesConfig) => {
+      debugLog(`Routes configured for ${route.getName()}`);
+      console.log(runningMessage);
+    });
   });
+}).catch(error => {
+  debugLog("Unable to connect to the database: ", error)
 });
+

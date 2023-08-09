@@ -1,6 +1,7 @@
 import { BookDto } from "./../dto/book.dto";
 import shortid from "shortid";
 import debug from 'debug';
+import sequelize from "./../../common/sequelize.config";
 
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
@@ -11,32 +12,42 @@ class BooksDAO {
         log("Created new instance of Book DAO");
     }
 
-    async addBook(book: BookDto) {
-        book.id = shortid.generate();
-        this.books.push(book);
-        return book.id;
+    async addBook({ title, author, publishedYear }: BookDto) {
+        const query = "INSERT INTO books (title, author, publishedYear) VALUES (?, ?, ?, ?)";
+        const result = await sequelize.query(query, {
+            replacements: [title, author, publishedYear]
+        });
+        return result.length ? result[0] : null;
     }
 
     async getBooks() {
-        return this.books;
+        const query = "SELECT * FROM books";
+        const result = await sequelize.query(query);
+        return result;
     }
 
     async getBooksById(bookId: string) {
-        return this.books.find(book => book.id === bookId);
+        const query = "SELECT * FROM books WHERE id = ?";
+        const result = await sequelize.query(query, {
+            replacements: [bookId]
+        });
+        return result.length ? result[0] : null;
     }
 
-    async updateBookDetails(existingBook: BookDto) {
-        const bookIndex = this.books.findIndex(book => book.id === existingBook.id);
-        if (bookIndex < 0) {
-            return;
-        }
-        this.books[bookIndex] = existingBook;
-        return this.books[bookIndex];
+    async updateBookDetails({ id, author, publishedYear, title }: BookDto) {
+
+        const query = "UPDATE books SET title = ?, author = ?, publishedYear = ? WHERE id = ?";
+        const result = await sequelize.query(query, {
+            replacements: [title, author, publishedYear, id]
+        });
+        return result.length ? result[0] : null;
     }
 
     async removeBookById(bookId: string) {
-        const bookIndex = this.books.findIndex(book => book.id === bookId);
-        this.books.splice(bookIndex, 1);
+        const query = "DELETE FROM books WHERE id = ?";
+        await sequelize.query(query, { 
+            replacements: [bookId],
+        });
         return `${bookId} is removed`;
     }
 }
