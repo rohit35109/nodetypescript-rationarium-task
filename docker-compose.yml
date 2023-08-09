@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  webapp:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_HOST=mysql
+  
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bookstore
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
+volumes:
+  mysql-data
