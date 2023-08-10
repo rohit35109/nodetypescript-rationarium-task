@@ -25,4 +25,5 @@ This project was given as a task to showcase my nodejs and typescript skills. So
 2. I have give passwords and db name into the .env file or docker file but in real time this has to come from a vault of more secure way.
 3. As this is not a production level app, i have created data folder that persists the data accross the system. In real time we would have database at seperate place and not inside a docker container.
 4. In terms of code quality, I have made sure that i showcase my typescript knowledge but in real time we can make this much better by adding enums, return type of a function and more to increase the readablity of the code and make use of tight coupling with typescript.
+5. Currently, i have not implemented watch properly that would make developer live easy. As of now everytime we change the code in app folder we have to restart the docker container which is not a good solution and can be configured to watch app folder to rerender code automatically when made any changes.
 
