@@ -12,20 +12,14 @@ export class BookRoutes extends CommonRoutesConfig {
     this.app
       .route("/books")
       .get(bookController.listBook)
-      .post(
-        bookMiddleware.ValidateCreateBookBodyFields,
-        bookController.createBook
-      );
+      .post(bookMiddleware.ValidateBookBodyFields, bookController.createBook);
 
     this.app.param("id", bookMiddleware.extractBookId);
 
     this.app
       .route("/books/:id")
       .get(bookController.getBookById)
-      .put(
-        bookMiddleware.ValidateUpdateBookBodyFields,
-        bookController.updateBook
-      )
+      .put(bookMiddleware.ValidateBookBodyFields, bookController.updateBook)
       .delete(bookController.deleteBook);
 
     return this.app;

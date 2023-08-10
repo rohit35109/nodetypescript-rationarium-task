@@ -2,6 +2,7 @@ import { BookDto } from "./../dto/book.dto";
 import shortid from "shortid";
 import debug from "debug";
 import sequelize from "./../../common/sequelize.config";
+import { AppError } from "../../common/app.error";
 
 const log: debug.IDebugger = debug("app:in-memory-dao");
 
@@ -21,7 +22,8 @@ class BooksDAO {
       });
       return "Book was added";
     } catch (error) {
-      throw error;
+      log(error);
+      throw new AppError(500, "An error occurred while adding the book", error);
     }
   }
 
@@ -31,7 +33,8 @@ class BooksDAO {
       const result = await sequelize.query(query);
       return result.length ? result[0] : [];
     } catch (error) {
-      throw error;
+      log(error);
+      throw new AppError(500, "An error occurred while fetching the books", error);
     }
   }
 
@@ -43,7 +46,8 @@ class BooksDAO {
       });
       return result.length ? result[0][0] : null;
     } catch (error) {
-      throw error;
+      log(error);
+      throw new AppError(500, "An error occurred while fetching the book by ID", error);
     }
   }
 
@@ -56,7 +60,8 @@ class BooksDAO {
       });
       return result.length ? result[0] : null;
     } catch (error) {
-      throw error;
+      log(error);
+      throw new AppError(500, "An error occurred while updating the book", error);
     }
   }
 
@@ -68,7 +73,8 @@ class BooksDAO {
       });
       return `${bookId} is removed`;
     } catch (error) {
-      throw error;
+      log(error);
+      throw new AppError(500, "An error occurred while deleteing the book", error);
     }
   }
 }
