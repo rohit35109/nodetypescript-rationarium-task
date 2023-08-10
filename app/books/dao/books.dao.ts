@@ -44,7 +44,10 @@ class BooksDAO {
       const result = await sequelize.query(query, {
         replacements: [bookId],
       });
-      return result.length ? result[0][0] : null;
+      if (!result.length || !result[0][0]) {
+        throw new AppError(404, "Book not found", null);
+      }
+      return result[0][0];
     } catch (error) {
       log(error);
       throw new AppError(500, "An error occurred while fetching the book by ID", error);
@@ -68,9 +71,12 @@ class BooksDAO {
   async removeBookById(bookId: string) {
     try {
       const query = "DELETE FROM books WHERE id = ?";
-      await sequelize.query(query, {
+      const [result, metaData]: any = await sequelize.query(query, {
         replacements: [bookId],
       });
+      if (result[0].affectedRows === 0) {
+        throw new AppError(404, "Book not found", null);
+      }
       return `${bookId} is removed`;
     } catch (error) {
       log(error);

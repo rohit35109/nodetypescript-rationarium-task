@@ -8,7 +8,8 @@ const sequelize = new Sequelize(process.env.DATABASE_NAME!, process.env.DATABASE
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
+    },
+    logging: false
 });
 
 export default sequelize;
