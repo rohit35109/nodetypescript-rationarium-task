@@ -15,8 +15,8 @@ class BookController {
   }
 
   async createBook(req: Request, res: Response) {
-    const bookId = await bookService.create(req.body);
-    res.status(201).send(bookId);
+    log(await bookService.create(req.body));
+    res.status(204).send();
   }
 
   async updateBook(req: Request, res: Response) {
